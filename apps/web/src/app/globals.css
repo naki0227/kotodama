@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme {
+  --font-zen: var(--font-zen-kaku-gothic-new);
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-zen), sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Hide scrollbar for ultimate minimalism */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
