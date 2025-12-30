@@ -1,0 +1,3 @@
+kotodama-ai.com, www.kotodama-ai.com {
+    reverse_proxy web:3000
+}
