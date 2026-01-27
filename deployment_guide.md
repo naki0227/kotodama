@@ -123,11 +123,67 @@ Oracle Cloudなどのクラウドには「ファイアウォール」があり�
 
 ---
 
-## 🎉 完成！
 
-ブラウザのアドレスバーに以下を入力してください。
+---
 
-`http://[あなたのIPアドレス]:3000`
+## Step 6: 独自ドメイン & HTTPS化 (セキュリティ強化) 🔒✨
 
-Kotodamaが表示されれば大成功です！
-これが正真正銘、あなたが管理するサーバーで動いているWebアプリです。
+`http://217...:3000` ではなく `https://kotodama-ai.com` のように安全なURLでアクセスできるようにします。
+
+### 1. ドメインの設定 (DNS)
+ドメイン管理画面（Xserverドメインなど）で「DNSレコード」を追加します。
+- **種別**: `A`
+- **内容**: サーバーのIPアドレス (`217.142.241.242`)
+
+※ 反映されるまで時間がかかる場合があります。
+
+### 2. HTTPS化 (Caddyの導入)
+サーバー内の `docker-compose.yml` にCaddy（自動HTTPS化ツール）を追加します。
+
+1. **ファイアウォール開放 (80/443)**
+   Oracle CloudのSecurity Listと、サーバー設定(`iptables`)の両方で `80` と `443` ポートを開けてください。
+
+2. **Caddyfileの作成**
+   ```text
+   kotodama-ai.com {
+       reverse_proxy web:3000
+   }
+   ```
+
+3. **再起動**
+   ```bash
+   sudo docker compose up -d --build --remove-orphans
+   ```
+
+---
+
+## 🔄 運用マニュアル: 新機能の追加・更新方法 🛠️
+
+機能を追加・修正したあと、本番サーバーに反映させる手順です。
+
+### 1. 開発 & プッシュ (自分のPC)
+コードを修正したら、GitHubに送信します。
+```bash
+git add .
+git commit -m "新機能追加"
+git push origin main
+```
+
+### 2. サーバーにログイン
+```bash
+ssh -i ~/.ssh/oracle_key.key ubuntu@217.142.241.242
+```
+
+### 3. 最新コードの取り込み & 再起動 (サーバー内)
+```bash
+cd kotodama
+git pull origin main
+sudo docker compose up -d --build --remove-orphans
+```
+
+*   **解説**:
+    *   `git pull`: GitHubから最新の変更をダウンロードします。
+    *   `docker compose up -d --build`: Dockerコンテナを作り直して起動します。
+    *   `--remove-orphans`: 古い設定のゴミを削除します。
+
+🎉 これで数分後には、新しい機能が世界中に公開されます！
