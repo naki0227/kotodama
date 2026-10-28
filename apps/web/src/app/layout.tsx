@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Zen_Kaku_Gothic_New } from "next/font/google";
 import "./globals.css";
+import MotionProvider from "@/components/MotionProvider";
 
 const zen = Zen_Kaku_Gothic_New({
   weight: ["300", "400", "500", "700", "900"],
@@ -43,7 +44,7 @@ export default function RootLayout({
       <body
         className={`${zen.variable} antialiased selection:bg-gray-200 selection:text-black`}
       >
-        {children}
+        <MotionProvider>{children}</MotionProvider>
       </body>
     </html>
   );
